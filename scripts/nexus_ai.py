@@ -12,10 +12,9 @@ import sys
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-TOKEN_FILE = os.path.join(SCRIPT_DIR, 'token.txt')
 QR_IMAGE = os.path.join(SCRIPT_DIR, 'nexus_qr.png')
 
-NEXUS_BASE = 'https://nexus-saas-test-45653-8-1317958785.sh.run.tcloudbase.com'
+NEXUS_BASE = 'https://nexus-saas-45653-8-1317958785.sh.run.tcloudbase.com'
 RAG_URL = 'https://ai.hydts.cn/ai/rag-stream'
 
 
@@ -40,15 +39,6 @@ def get_miniapp_url(path='pages/index/index'):
 
 
 # ── 工具函数 ────────────────────────────────────────────────
-
-def read_token():
-    """读取 JWT token"""
-    if os.path.exists(TOKEN_FILE):
-        with open(TOKEN_FILE, 'r', encoding='utf-8') as f:
-            return f.read().strip()
-    print(f'错误：未找到 token.txt，请创建 {TOKEN_FILE} 并写入 JWT token')
-    sys.exit(1)
-
 
 def detect_label(title: str, content: str) -> str:
     """根据标题和内容自动判断资源类型 label"""
@@ -77,12 +67,10 @@ def strip_html(text: str) -> str:
 # ── 功能一：发布资源 ─────────────────────────────────────────
 
 def cmd_post(phone: str, title: str, content: str):
-    token = read_token()
     label = detect_label(title, content)
     print(f'自动识别 label: {label}')
 
     params = urllib.parse.urlencode({
-        'token': token,
         'phone': phone,
         'title': title,
         'content': content,
